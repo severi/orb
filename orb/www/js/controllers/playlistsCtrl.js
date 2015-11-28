@@ -1,8 +1,8 @@
 'use strict';
 
 
-angular.module('starter.controllers').controller('PlaylistsCtrl', ['$scope','$timeout','$interval',
-  function($scope, $timeout, $interval) {
+angular.module('starter.controllers').controller('PlaylistsCtrl', ['$scope',
+  function($scope) {
     // This provides Authentication context.
     $scope.playlists = [
       { title: 'Reggae', id: 1 },
@@ -18,27 +18,25 @@ angular.module('starter.controllers').controller('PlaylistsCtrl', ['$scope','$ti
       lon: "position.coords.longitude",
       lat: "position.coords.latitude"
     };
-    let watchId = navigator.geolocation.watchPosition(function(position){
+
+    function onError(error) {
+      $scope.test="GAY";
+    }
+
+    var onSuccess = function(position) {
       tmp++;
       $scope.$apply(function() {
-
-
-      $scope.test={
-        index: tmp,
-        lon: position.coords.longitude,
-        lat: position.coords.latitude
-      };
+        $scope.test={
+          index: tmp,
+          lon: position.coords.longitude,
+          lat: position.coords.latitude
+        };
       });
-    },function(){
-      $scope.test="GAY";
-    },{ timeout: 1000, enableHighAccuracy: true , maximumAge:1000});
+    };
 
-    // $interval(function() {
-    //   //tmp+=1;
-    //   //$scope.playlists[0]={ title: 'Reggaeasdasdasdasd'+tmp, id: 7 };
-    // }, 10);
+    let watchPositionParams = { timeout: 1000, enableHighAccuracy: true , maximumAge:1000};
 
-
+    let watchId = navigator.geolocation.watchPosition(onSuccess, onError, watchPositionParams);
   }
 
 ]);
