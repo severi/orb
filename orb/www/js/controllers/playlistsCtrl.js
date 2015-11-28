@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('starter.controllers').controller('PlaylistsCtrl', ['$scope',
   function($scope) {
     // This provides Authentication context.
