@@ -1,9 +1,16 @@
-
-<ion-view hide-nav-bar="true">
-  <h1>TEST ORB PAGE2</h1>
-  <ion-content>
-    <ion-item> <p>lon: {{coordinates.lon}} </p></ion-item>
-    <ion-item><p>lat: {{coordinates.lat}} </p></ion-item>
-    <ion-item><p>compass: {{compass}} </p></ion-item>
-  </ion-content>
+<ion-view hide-nav-bar="true" class="orb-view">
+ 	<body>
+	  <ion-content>
+	    <!-- <ion-item><p>lon: {{coordinates.lon}} </p></ion-item>
+	    <ion-item><p>lat: {{coordinates.lat}} </p></ion-item>
+	    <ion-item><p>compass: {{compass}} </p></ion-item> -->
+	    <p>lat: {{coordinates.lat}} </p>
+	    <p>lon: {{coordinates.lon}} </p>
+	    <p>compass: {{compass}} </p>
+	  </ion-content>
+	  <p>jee</p>
+	  <div class="centered">
+	  	<img src="img/arrow.png">
+	  </div>
+    </body>
 </ion-view>
