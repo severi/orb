@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope',
-  function($scope) {
+angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ionicPlatform',
+  function($scope, $ionicPlatform) {
     let watchPositionParams = { timeout: 1000, enableHighAccuracy: true , maximumAge:1000};
 
     $scope.coordinates={
@@ -9,14 +9,12 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope',
       lat: "position.coords.latitude"
     };
 
-
-
     function onError(error) {
       console.log("Failed to fetch location");
       console.log(error);
     }
 
-    var onSuccess = function(position) {
+    var geolocationSuccess = function(position) {
       $scope.$apply(function() {
         $scope.coordinates={
           lon: position.coords.longitude,
@@ -31,15 +29,11 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope',
       });
     };
 
-
-    let locationWatchId = navigator.geolocation.watchPosition(onSuccess, onError, watchPositionParams);
-    let compassWatchID  = navigator.compass.watchHeading(compassSuccess, onError);
-//    navigator.compass.getCurrentHeading(compassSuccess, onError);
-    // document.addEventListener("deviceready", onDeviceReady, false);
-    // function onDeviceReady() {
-    //   console.log("tsajajajjaja");
-    //   console.log(navigator.compass);
-    // }
+    $ionicPlatform.ready(function() {
+      console.log("orbViewCtrl.js: device ready - getting compass");
+      var compassWatchID  = navigator.compass.watchHeading(compassSuccess, onError);
+    });
+    let locationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, onError, watchPositionParams);
   }
 
 ]);

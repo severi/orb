@@ -6,16 +6,21 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-      }
-      if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
-      }
+      console.log("app.js: iconicPlatform ready");
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // for some reason the if the following lines are uncommented the ready function does not get called on controller level... - severi //
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      //   // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      //   // for form inputs)
+      //   if (window.cordova && window.cordova.plugins.Keyboard) {
+      //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      //     cordova.plugins.Keyboard.disableScroll(true);
+      //   }
+        if (window.StatusBar) {
+          // org.apache.cordova.statusbar required
+          StatusBar.styleDefault();
+        }
     });
   })
 
