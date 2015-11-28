@@ -1,5 +1,6 @@
 'use strict';
 
+
 angular.module('starter.controllers').controller('AppCtrl', ['$scope', '$ionicModal', '$timeout',
   function($scope, $ionicModal, $timeout) {
     // With the new view caching in Ionic, Controllers are only called
@@ -41,4 +42,5 @@ angular.module('starter.controllers').controller('AppCtrl', ['$scope', '$ionicMo
     };
   }
 ]);
+
 
