@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ionicPlatform',
-  function($scope, $ionicPlatform) {
+angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ionicPlatform','$interval',
+  function($scope, $ionicPlatform, $interval) {
+
+    var tmpX =0;
     let watchPositionParams = { timeout: 1000, enableHighAccuracy: true , maximumAge:1000};
 
     $scope.coordinates={
@@ -38,63 +40,64 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ioni
     let locationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, onError, watchPositionParams);
 
 
-
-    //Canvas things
-    var canvas, ctx;
-
-    window.onload = window.onresize = function() {
-        draw("kakkkaaaaa");
+    function drawCircle(ctx, x, y, radius, opacity){
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2*Math.PI);
+      ctx.lineWidth=3;
+      ctx.strokeStyle='rgba(255,255,255,'+opacity+')';
+      ctx.stroke();
     }
+
+    function drawTest(ctx, canvas, longitude){
+      //draw lines to canvas
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.strokeStyle="#FF0000";
+      ctx.stroke();
+
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width, 0);
+      ctx.lineTo(0, canvas.height);
+      ctx.strokeStyle="#FF0000";
+      ctx.stroke();
+
+      //Other stuff
+      ctx.font="30px Verdana";
+      // Create gradient
+      var gradient=ctx.createLinearGradient(0,0,canvas.width,0);
+      gradient.addColorStop("0","magenta");
+      gradient.addColorStop("0.5","blue");
+      gradient.addColorStop("1.0","red");
+      // Fill with gradient
+      ctx.strokeStyle=gradient;
+      ctx.strokeText(longitude,10,50);
+    }
+
     function draw(longitude) {
+      //canvas initialization
+      let canvas = document.getElementById("myCanvas");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      let ctx = canvas.getContext("2d");
 
-        //canvas initialization
-        canvas = document.getElementById("myCanvas");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        ctx = canvas.getContext("2d");
-
-
-        //draw lines to canvas
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.strokeStyle="#FF0000";
-        ctx.stroke();
-
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width, 0);
-        ctx.lineTo(0, canvas.height);
-        ctx.strokeStyle="#FF0000";
-        ctx.stroke();
+      drawTest(ctx, canvas, longitude);
+      drawCircle(ctx, tmpX,500,20, 1);
+      drawCircle(ctx, 50,50,tmpX, 0.5);
 
 
-        //Other stuff
-        ctx.font="30px Verdana";
-        // Create gradient
-        var gradient=ctx.createLinearGradient(0,0,canvas.width,0);
-        gradient.addColorStop("0","magenta");
-        gradient.addColorStop("0.5","blue");
-        gradient.addColorStop("1.0","red");
-        // Fill with gradient
-        ctx.strokeStyle=gradient;
-        ctx.strokeText(longitude,10,50);
-
-        ctx.beginPath();
-        ctx.arc(90,300,25,0,2*Math.PI);
-        ctx.lineWidth=3;
-        ctx.strokeStyle="#FFFFFF";
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(150,500,20,0,2*Math.PI);
-        ctx.lineWidth=3;
-        ctx.strokeStyle="#FFFFFF";
-        ctx.stroke();
 
     }
+    $interval(function(){
+      ++tmpX;
+      draw();
+      if (tmpX>window.innerWidth){
+        tmpX=0;
+      }
+    }, 5);
   }
+
 
 ]);
