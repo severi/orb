@@ -76,14 +76,14 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ioni
       ctx.strokeText(longitude,10,50);
     }
 
-    function draw(longitude) {
+    function draw() {
       //canvas initialization
       let canvas = document.getElementById("myCanvas");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       let ctx = canvas.getContext("2d");
 
-      drawTest(ctx, canvas, longitude);
+      drawTest(ctx, canvas, $scope.coordinates.lon);
       drawCircle(ctx, tmpX,500,20, 1);
       drawCircle(ctx, 50,50,tmpX, 0.5);
 
