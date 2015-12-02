@@ -3,8 +3,9 @@
 angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ionicPlatform','$interval',
   function($scope, $ionicPlatform, $interval) {
 
-    var tmpX =0;
     let watchPositionParams = { timeout: 1000, enableHighAccuracy: true , maximumAge:1000};
+    let compassAngle=0;
+    let pauseDraw=false;
 
     $scope.coordinates={
       lon: "position.coords.longitude",
@@ -23,13 +24,16 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ioni
           lat: position.coords.latitude
         };
       });
-
-      draw(position.coords.longitude);
     };
 
     var compassSuccess = function(heading) {
       $scope.$apply(function() {
         $scope.compass = heading;
+        if (Math.abs(parseInt(heading.magneticHeading)-compassAngle)>5 && pauseDraw==false){
+          compassAngle=parseInt(heading.magneticHeading);
+          pauseDraw=true;
+          draw();
+        }
       });
     };
 
@@ -74,29 +78,25 @@ angular.module('starter.controllers').controller('OrbViewCtrl', ['$scope','$ioni
       // Fill with gradient
       ctx.strokeStyle=gradient;
       ctx.strokeText(longitude,10,50);
+      pauseDraw=false;
     }
 
     function draw() {
       //canvas initialization
+      let angleRadian = parseInt(compassAngle)*Math.PI/180;
       let canvas = document.getElementById("myCanvas");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      let origon = {x: window.innerWidth/2, y:window.innerHeight/2};
       let ctx = canvas.getContext("2d");
 
       drawTest(ctx, canvas, $scope.coordinates.lon);
-      drawCircle(ctx, tmpX,500,20, 1);
-      drawCircle(ctx, 50,50,tmpX, 0.5);
-
-
-
+      let distance = 140;
+      let x = origon.x+Math.cos(angleRadian)*distance;
+      let y= origon.y+Math.sin(angleRadian)*distance;
+      drawCircle(ctx, x, y,20, 1);
+      drawCircle(ctx, origon.x,origon.y, 20, 0.5);
     }
-    $interval(function(){
-      ++tmpX;
-      draw();
-      if (tmpX>window.innerWidth){
-        tmpX=0;
-      }
-    }, 5);
   }
 
 
