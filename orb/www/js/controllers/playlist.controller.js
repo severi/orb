@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('starter.controllers').controller('PlaylistCtrl', ['$scope',
+angular.module('app').controller('PlaylistController', ['$scope',
   function($scope) {
     let tmp =1;
     $scope.test = "moi";
