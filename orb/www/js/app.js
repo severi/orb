@@ -38,7 +38,7 @@ angular.module('app', ['ionic'])
         views: {
           'menuContent': {
             templateUrl: 'templates/playlists.html',
-            controller: 'PlaylistsController'
+            controller: 'PlaylistsController as vm'
           }
         }
       })
@@ -58,7 +58,7 @@ angular.module('app', ['ionic'])
         views: {
           'menuContent': {
             templateUrl: 'templates/playlist.html',
-            controller: 'PlaylistController'
+            controller: 'PlaylistController as vm'
           }
         }
       });

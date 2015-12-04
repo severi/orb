@@ -1,14 +1,14 @@
 <ion-view hide-nav-bar="false">
-   <ion-nav-title>{{test}}</ion-nav-title>
+   <ion-nav-title>{{vm.test}}</ion-nav-title>
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
+      <ion-item ng-repeat="playlist in vm.playlists" href="#/app/playlists/{{playlist.id}}">
         {{playlist.title}}
       </ion-item>
     </ion-list>
-     <ion-item> <p> --> {{test.lon}} </p></ion-item>
-    <p> --> {{test.lat}} </p>
-    <p> --> {{test.index}} </p>
-    <ion-item><p> --> {{test}} </p></ion-item>
+     <ion-item> <p> --> {{vm.test.lon}} </p></ion-item>
+    <p> --> {{vm.test.lat}} </p>
+    <p> --> {{vm.test.index}} </p>
+    <ion-item><p> --> {{vm.test}} </p></ion-item>
   </ion-content>
 </ion-view>
