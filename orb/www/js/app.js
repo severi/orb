@@ -30,7 +30,7 @@ angular.module('app', ['ionic'])
         url: '/app',
         abstract: true,
         templateUrl: 'templates/menu.html',
-        controller: 'AppController'
+        controller: 'AppController as vm'
       })
 
       .state('app.playlists', {
