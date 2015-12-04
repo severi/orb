@@ -48,7 +48,7 @@ angular.module('app', ['ionic'])
         views: {
           'menuContent': {
             templateUrl: 'templates/orbView.html',
-            controller: 'OrbViewController'
+            controller: 'OrbViewController as vm'
           }
         }
       })
