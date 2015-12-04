@@ -9,6 +9,10 @@ function OrbViewController($scope, $ionicPlatform) {
   let compassAngle=0;
   let pauseDraw=false;
 
+  let orbs = [];
+  orbs.push(new Orb(100,200));
+  orbs.push(new Orb(100,600));
+
   vm.coordinates={
     lon: 0,
     lat: 0
@@ -26,7 +30,6 @@ function OrbViewController($scope, $ionicPlatform) {
       if (pauseDraw==false){
         compassAngle=parseInt(heading.magneticHeading);
         pauseDraw=true;
-        console.log("drawing");
         draw();
       }
     });
@@ -55,13 +58,24 @@ function OrbViewController($scope, $ionicPlatform) {
     let origon = {x: window.innerWidth/2, y:window.innerHeight/2};
     let ctx = canvas.getContext("2d");
 
-    let distance = 140;
-    let x = origon.x+Math.cos(angleRadian)*distance;
-    let y= origon.y+Math.sin(angleRadian)*distance;
-    drawCircle(ctx, x, y,20, 1);
-    drawCircle(ctx, origon.x,origon.y, 20, 0.5);
+    let maxSize = 20;
+    let maxOpacity=1;
+    orbs.forEach(function(orb) {
+      let x = origon.x + (orb.x-origon.x)*Math.cos(angleRadian) - (orb.y-origon.y)*Math.sin(angleRadian);
+      let y = origon.y + (orb.x-origon.x)*Math.sin(angleRadian) + (orb.y-origon.y)*Math.cos(angleRadian);
+      let distance = Math.sqrt( (orb.x-origon.x)*(orb.x-origon.x) + (orb.y-origon.y)*(orb.y-origon.x) );
+      drawCircle(ctx, x, y, scaleToDistance(maxSize,distance), scaleToDistance(maxOpacity,distance));
+    });
+
+    //    requestAnimationFrame(draw);
     pauseDraw=false;
   }
+
+  function scaleToDistance(maxValue, distance){
+    return maxValue-distance*(maxValue/window.innerHeight);
+  }
+
+
 
   function drawCircle(ctx, x, y, radius, opacity){
     ctx.beginPath();
