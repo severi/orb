@@ -2,43 +2,32 @@
 angular.module('app').controller('AppController', AppController);
 
 function AppController($scope, $ionicModal, $timeout) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
   var vm = this;
-
-  // Form data for the login modal
   vm.loginData = {};
+  vm.closeLogin = closeLogin;
+  vm.login = login;
+  vm.doLogin = doLogin;
 
-  // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
     vm.modal = modal;
   });
 
-  // Triggered in the login modal to close it
-  vm.closeLogin = function() {
+  function closeLogin() {
     vm.modal.hide();
-  };
+  }
 
-  // Open the login modal
-  vm.login = function() {
+  function login() {
     vm.modal.show();
-  };
+  }
 
-  // Perform the login action when the user submits the login form
-  vm.doLogin = function() {
+  function doLogin() {
     console.log('Doing login', vm.loginData);
-
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
       vm.closeLogin();
     }, 1000);
-  };
+  }
 }
