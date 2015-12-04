@@ -22,7 +22,10 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-geolocation",
-    "cordova-plugin-device-orientation"
+    "cordova-plugin-device-orientation",
+    "org.apache.cordova.device-orientation"
   ],
-  "cordovaPlatforms": []
+  "cordovaPlatforms": [
+    "android"
+  ]
 }
