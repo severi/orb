@@ -10,6 +10,8 @@ function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService
   let compassAngle=0;
   let currentAngle = 0;
   let pauseDraw=false;
+  let previousUpdate=undefined;
+
   vm.orbs = [];
   vm.coordinates={
     lon: 0,
@@ -26,7 +28,9 @@ function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService
   function compassSuccess(heading) {
     $scope.$apply(function() {
       vm.compass = heading;
-      if (pauseDraw == false) {
+      var treshold = 3;
+      var difference = Math.abs(compassAngle*180/Math.PI-heading.magneticHeading);
+      if (pauseDraw == false && difference>treshold) {
         compassAngle=parseInt(heading.magneticHeading)*Math.PI/180;
       };
     });
@@ -48,12 +52,16 @@ function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService
 
   function draw() {
     pauseDraw = true;
+
+    let currentTime = Date.now();
+    let delta= currentTime - previousUpdate;
+    let step = 0.02*delta/20;
     let target = Math.atan2(Math.sin((compassAngle - currentAngle)), Math.cos((compassAngle - currentAngle)));
 
-    if (target < 0 && Math.abs(target) > 0.01) {
-      currentAngle -= 0.02;
-    }else if (target >= 0 && Math.abs(target) > 0.01) {
-      currentAngle += 0.02;
+    if (target < 0 && Math.abs(target) > step) {
+      currentAngle -= step;
+    }else if (target >= 0 && Math.abs(target) > step) {
+      currentAngle += step;
     };
 
     let canvas = document.getElementById("myCanvas");
@@ -73,6 +81,7 @@ function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService
       drawCircle(ctx, orb.x, orb.y, scaleToDistance(maxSize,distance), scaleToDistance(maxOpacity,distance));
     });
 
+    previousUpdate = currentTime;
     requestAnimationFrame(draw);
     pauseDraw=false;
   }
@@ -92,7 +101,7 @@ function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService
   }
 
   function refreshOrbs(){
-    console.log("refreshing orbs");
+//    console.log("refreshing orbs");
     vm.orbs = orbLocationService.getNeighbourOrbs(vm.coordinates);
   }
 
