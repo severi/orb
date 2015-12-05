@@ -29,7 +29,9 @@ function OrbViewController($scope, $ionicPlatform) {
   function compassSuccess(heading) {
     $scope.$apply(function() {
       vm.compass = heading;
-      compassAngle=parseInt(heading.magneticHeading)*Math.PI/180;
+      if (pauseDraw == false) {
+        compassAngle=parseInt(heading.magneticHeading)*Math.PI/180;
+      };
       // if (pauseDraw==false){
       //   compassAngle=parseInt(heading.magneticHeading);
       //   pauseDraw=true;
@@ -55,6 +57,8 @@ function OrbViewController($scope, $ionicPlatform) {
   function draw() {
     //canvas initialization
     //let currentAngle = -parseInt(compassAngle)*Math.PI/180;
+    pauseDraw = true;
+
     $scope.$apply(function() {
       vm.coordinates={
         lon: currentAngle,
@@ -62,23 +66,16 @@ function OrbViewController($scope, $ionicPlatform) {
       };
     });
 
-    let CCV = 2*Math.PI - compassAngle + currentAngle;
-    let CV = compassAngle - currentAngle;
-    let step = 0.01;
 
-    if((CCV - CV) > 0.2 ){
-      currentAngle -= step;
-    }else if((CV - CCV) > 0.2){
-      currentAngle += step;
-    }
+    let target = Math.atan2(Math.sin((compassAngle - currentAngle)), Math.cos((compassAngle - currentAngle)));
+    console.log("target: " + target);
 
-    // if (currentAngle < -2*Math.PI) {
-    //   currentAngle += 2*Math.PI;
-    // };
+    if (target < 0 && Math.abs(target) > 0.01) {
+      currentAngle -= 0.02;
+    }else if (target >= 0 && Math.abs(target) > 0.01) {
+      currentAngle += 0.02;
+    };
 
-    // if (currentAngle > 0) {
-    //   currentAngle -= 2*Math.PI;
-    // };
 
     let canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth;
