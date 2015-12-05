@@ -62,26 +62,16 @@ function OrbViewController($scope, $ionicPlatform) {
       };
     });
 
-    
     let CCV = 2*Math.PI - compassAngle + currentAngle;
     let CV = compassAngle - currentAngle;
     let step = 0.01;
 
-    if(CCV > CV){
+    if((CCV - CV) > 0.2 ){
       currentAngle -= step;
-    }else{
+    }else if((CV - CCV) > 0.2){
       currentAngle += step;
     }
 
-    if (Math.abs(currentAngle - compassAngle) < 1.5*step) {
-      currentAngle = compassAngle;
-      console.log("eka");
-    };
-
-    if (Math.abs(compassAngle - currentAngle) < 1.5*step) {
-      currentAngle = compassAngle;
-      console.log("toka");
-    };
     // if (currentAngle < -2*Math.PI) {
     //   currentAngle += 2*Math.PI;
     // };
