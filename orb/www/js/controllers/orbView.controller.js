@@ -2,18 +2,15 @@
 
 angular.module('app').controller('OrbViewController', OrbViewController);
 
-function OrbViewController($scope, $ionicPlatform) {
+orbLocationService.$inject = ['$scope', '$interval','$ionicPlatform', 'orbLocationService'];
+function OrbViewController($scope, $interval, $ionicPlatform, orbLocationService) {
   var vm = this;
 
   let watchPositionParams = { timeout: 1000, enableHighAccuracy: true , maximumAge:1000};
   let compassAngle=0;
   let currentAngle = 0;
   let pauseDraw=false;
-
-  let orbs = [];
-  orbs.push(new Orb(50,100));
-  orbs.push(new Orb(-100,80));
-
+  vm.orbs = [];
   vm.coordinates={
     lon: 0,
     lat: 0
@@ -32,21 +29,16 @@ function OrbViewController($scope, $ionicPlatform) {
       if (pauseDraw == false) {
         compassAngle=parseInt(heading.magneticHeading)*Math.PI/180;
       };
-      // if (pauseDraw==false){
-      //   compassAngle=parseInt(heading.magneticHeading);
-      //   pauseDraw=true;
-        //draw();
-      //}
     });
   }
 
   function geolocationSuccess(position) {
-    // $scope.$apply(function() {
-    //   vm.coordinates={
-    //     lon: position.coords.longitude,
-    //     lat: position.coords.latitude
-    //   };
-    // });
+    $scope.$apply(function() {
+      vm.coordinates={
+        lon: position.coords.longitude,
+        lat: position.coords.latitude
+      };
+    });
   }
 
   function onError(error) {
@@ -55,27 +47,14 @@ function OrbViewController($scope, $ionicPlatform) {
   }
 
   function draw() {
-    //canvas initialization
-    //let currentAngle = -parseInt(compassAngle)*Math.PI/180;
     pauseDraw = true;
-
-    $scope.$apply(function() {
-      vm.coordinates={
-        lon: currentAngle,
-        lat: "jee"
-      };
-    });
-
-
     let target = Math.atan2(Math.sin((compassAngle - currentAngle)), Math.cos((compassAngle - currentAngle)));
-    console.log("target: " + target);
 
     if (target < 0 && Math.abs(target) > 0.01) {
       currentAngle -= 0.02;
     }else if (target >= 0 && Math.abs(target) > 0.01) {
       currentAngle += 0.02;
     };
-
 
     let canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth;
@@ -85,20 +64,14 @@ function OrbViewController($scope, $ionicPlatform) {
 
     let maxSize = 20;
     let maxOpacity=1;
-    
 
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.rotate(-currentAngle);
 
-    orbs.forEach(function(orb) {
+    vm.orbs.forEach(function(orb) {
       let distance = Math.sqrt( (orb.x-origon.x)*(orb.x-origon.x) + (orb.y-origon.y)*(orb.y-origon.x) );
       drawCircle(ctx, orb.x, orb.y, scaleToDistance(maxSize,distance), scaleToDistance(maxOpacity,distance));
     });
-
-    //drawCircle(ctx, 0, 0, 20, 100);
-    //drawCircle(ctx, 200, 20, 20, 100);
-    //drawCircle(ctx, 300, 10, 20, 100);
-
 
     requestAnimationFrame(draw);
     pauseDraw=false;
@@ -117,4 +90,11 @@ function OrbViewController($scope, $ionicPlatform) {
     ctx.strokeStyle='rgba(255,255,255,'+opacity+')';
     ctx.stroke();
   }
+
+  function refreshOrbs(){
+    console.log("refreshing orbs");
+    vm.orbs = orbLocationService.getNeighbourOrbs(vm.coordinates);
+  }
+
+  $interval(refreshOrbs, 5000);
 }
