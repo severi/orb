@@ -1,0 +1,33 @@
+- name: Test whether node exists
+  command: "test -f /usr/local/bin/node"
+  register: node_exists
+  ignore_errors: True
+
+- name: Install nodejs
+#  become: yes
+  get_url: url=http://nodejs.org/dist/v4.2.3/node-v4.2.3-linux-x64.tar.gz dest=/tmp/node-v4.2.3-linux-x64.tar.gz
+  register: download
+  when: node_exists.rc == 1
+
+- name: unarchive nodejs
+  become: yes
+  shell: "tar --strip-components 1 -xzvf /tmp/node-v* -C /usr/local"
+  when: download|success
+  register: unarchived
+
+- name: install cordova
+  become: yes
+  npm: name=cordova global=yes
+  when: unarchived|success
+  
+- name: install ionic
+  become: yes
+  npm: name=ionic global=yes
+  when: unarchived|success
+
+- name: install phonegap
+  become: yes
+  npm: name=phonegap global=yes
+  when: unarchived|success
+
+
