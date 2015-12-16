@@ -1,0 +1,36 @@
+---
+
+###########################################################################################
+# Original source: https://github.com/nickpack/ansible-role-android-sdk/tree/master/tasks #
+# Modified to enable building ionic app for android                                       #
+###########################################################################################
+
+- include: dependencies.yml
+- include: sdktools.yml
+- include: sdksinstall.yml
+
+
+#####################################################
+# make building android application work with ionic #
+#####################################################
+
+- name: Install Java and other dependancies
+  apt: name={{ item }} state=installed
+  become: yes
+  with_items:
+    - openjdk-7-jdk
+    - lib32stdc++6 # fixes :CordovaLib:processDebugResources FAILED when building android platform
+    - lib32z1
+
+- name: Change android permissions
+  become: yes
+  shell: chown -R vagrant:vagrant /opt/android-sdk-linux
+
+- name: Install Android SDKs
+  shell: echo y | android update sdk -u -a -t "{{ item }}" 
+  with_items:
+    - tools
+    - platform-tools
+    - build-tools
+    - android-22
+    - extra-android-support

@@ -4,7 +4,6 @@
   ignore_errors: True
 
 - name: Install nodejs
-#  become: yes
   get_url: url=http://nodejs.org/dist/v4.2.3/node-v4.2.3-linux-x64.tar.gz dest=/tmp/node-v4.2.3-linux-x64.tar.gz
   register: download
   when: node_exists.rc == 1
@@ -18,16 +17,20 @@
 - name: install cordova
   become: yes
   npm: name=cordova global=yes
-  when: unarchived|success
+  when: unarchived|changed
   
 - name: install ionic
   become: yes
   npm: name=ionic global=yes
-  when: unarchived|success
+  when: unarchived|changed
 
 - name: install phonegap
   become: yes
   npm: name=phonegap global=yes
-  when: unarchived|success
+  when: unarchived|changed
+
+
+
+
 
 

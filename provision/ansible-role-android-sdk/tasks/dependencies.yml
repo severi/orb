@@ -1,0 +1,23 @@
+---
+- name: Enable i386 arch in aptitude
+  become: yes
+  command: dpkg --add-architecture i386
+  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Linuxmint") and ansible_distribution_version == "14.04"
+
+- name: Install ia32-libs on Ubuntu 12.04
+  become: yes
+  apt: pkg={{ item }} state=latest
+  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Linuxmint") and ansible_distribution_version == "12.04"
+  with_items: ubuntu_precise_dependency_packages
+
+- name: Install build dependencies on Ubuntu
+  become: yes
+  apt: pkg={{ item }} state=latest
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Linuxmint"
+  with_items: ubuntu_dependency_packages
+
+- name: Install i386 dependencies on RH family
+  become: yes
+  yum: pkg={{ item }} state=latest
+  when: ansible_distribution == "Fedora" or ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  with_items: rh_dependency_packages

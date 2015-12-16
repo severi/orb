@@ -1,3 +1,5 @@
 - hosts: all
   roles:
-      - ionic
+    - ansible-role-android-sdk
+    - ionic
+
