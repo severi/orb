@@ -1,0 +1,21 @@
+- name: Install zsh
+  apt: name={{item}} state=latest update_cache=yes install_recommends=yes
+  with_items:
+    - zsh
+    - git
+    - vim
+  become: yes
+
+- name: install oh my zsh
+  git: repo=https://github.com/robbyrussell/oh-my-zsh.git
+       dest=~/.oh-my-zsh
+
+- name: copy .zshrc
+  shell: cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+- name: set zsh as default shell
+  become: yes
+  user: name=vagrant shell=/bin/zsh
+
+  
+  
