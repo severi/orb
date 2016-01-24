@@ -1,4 +1,11 @@
-import {Page, NavController, Platform} from 'ionic-framework/ionic';
+import {Page, NavController, Platform, DomUtil} from 'ionic-framework/ionic'; // DomUtil not found..
+
+/*
+http://ionicframework.com/docs/v2/platform/push-notifications/
+not working yet..
+
+import {Geolocation, DeviceOrientation} from 'ngcordova';
+*/
 
 @Page({
     templateUrl: 'build/pages/orb/orb.html'
@@ -21,8 +28,8 @@ export class OrbPage {
     initializePage(){
         this.platform.ready().then(() => {
             console.log('Platform ready');
-            var locationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, onError, watchPositionParams);
-            var compassWatchID  = navigator.compass.watchHeading(compassSuccess, onError);
+            // var locationWatchId = Geolocation.watchPosition(geolocationSuccess, onError, watchPositionParams);
+            // var compassWatchID  = DeviceOrientation.watchHeading(compassSuccess, onError);
      
             this.draw();
         });
@@ -81,7 +88,7 @@ export class OrbPage {
         });
 
         this.previousUpdte = currentTime;
-        //requestAnimationFrame(draw);
+        //DomUtil.requestAnimationFrame(draw); // TODO: fix this
         this.pauseDraw=false;
     }
 

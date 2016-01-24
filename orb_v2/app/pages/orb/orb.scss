@@ -1,9 +1,33 @@
-.getting-started {
-
+.orb-view {
+    background-image: url("/img/background.png");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    
   p {
-    margin: 20px 0;
+    margin: 80px 0;
     line-height: 22px;
     font-size: 16px;
   }
 
+}
+
+#myCanvas {
+    position:fixed;
+    left:0;
+    top:0;
+}
+
+div.centered {
+    height: 100%;
+    position: relative
+}
+
+div.centered img {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
 }
